@@ -1,0 +1,213 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>보수 이슈 레이더</title><meta name="robots" content="noindex,nofollow">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<style>
+:root{--bg:#f2f2f7;--card:#fff;--tx:#111;--sub:#6b7280;--line:#e5e7eb;--up:#E5383B;--dn:#1D63D8;--pill-on:#111;--pill-on-tx:#fff;--soft:#f3f4f6}
+@media (prefers-color-scheme:dark){:root{--bg:#000;--card:#1c1c1e;--tx:#f5f5f7;--sub:#9ca3af;--line:#2c2c2e;--up:#ff5a5f;--dn:#4b8dff;--pill-on:#f5f5f7;--pill-on-tx:#000;--soft:#2c2c2e}}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--tx);font-family:"Pretendard Variable",Pretendard,-apple-system,"Malgun Gothic",sans-serif;font-size:14px;line-height:1.5}
+a{color:inherit;text-decoration:none}a:hover{text-decoration:underline}
+header{position:sticky;top:0;z-index:5;background:var(--bg);padding:14px 16px 8px;border-bottom:1px solid var(--line)}
+.hd{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap}h1{margin:0;font-size:20px;letter-spacing:-.4px}.when{color:var(--sub);font-size:12px}
+nav{display:flex;gap:6px;margin-top:8px;overflow-x:auto}nav a{padding:5px 11px;border-radius:999px;background:var(--card);border:1px solid var(--line);font-size:13px;white-space:nowrap}
+.filters{display:flex;gap:6px;margin-top:8px;overflow-x:auto}
+.f{border:1px solid var(--line);background:var(--card);color:var(--tx);border-radius:999px;padding:4px 10px;font:inherit;font-size:12px;cursor:pointer;white-space:nowrap;display:inline-flex;align-items:center;gap:5px}
+.f.on{background:var(--pill-on);color:var(--pill-on-tx);border-color:var(--pill-on)}.f i,.cat i{width:7px;height:7px;border-radius:50%;display:inline-block}
+main{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);gap:14px;padding:14px 16px 40px;max-width:1400px;margin:0 auto}
+.card{background:var(--card);border-radius:18px;padding:16px 18px;min-width:0}.wide{grid-column:1/-1}
+h2{margin:0 0 10px;font-size:17px;font-weight:700;letter-spacing:-.3px}h2 small{font-weight:400;color:var(--sub);font-size:12px;margin-left:6px}
+h3{font-size:14px;margin:14px 0 6px}
+.issue{display:flex;gap:12px;padding:12px 0;border-top:1px solid var(--line)}.issue:first-of-type{border-top:0}
+.rk{font-size:20px;font-weight:800;width:26px;text-align:center;flex:none}.body{min-width:0;flex:1}
+.ttl{font-weight:700;font-size:15px;letter-spacing:-.2px}.lede{color:var(--sub);font-size:12.5px;margin:3px 0 6px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.meta{display:flex;flex-wrap:wrap;gap:5px;align-items:center;margin-top:3px}
+.tag,.cat{background:var(--soft);border-radius:999px;padding:2px 8px;font-size:12px;display:inline-flex;align-items:center;gap:5px;white-space:nowrap}
+.pill-on{background:var(--pill-on);color:var(--pill-on-tx);border-radius:999px;padding:2px 8px;font-size:11.5px;font-weight:600;white-space:nowrap}
+em{font-style:normal}.up{color:var(--up);font-weight:700}
+.lean{display:inline-flex;border-radius:999px;overflow:hidden;font-size:12px}.lean b{padding:2px 8px;font-weight:600}
+.lean .c,small.c{color:var(--up)}.lean .p,small.p{color:var(--dn)}.lean .c{background:rgba(229,56,59,.12)}.lean .p{background:rgba(29,99,216,.12)}
+ul{margin:0;padding:0;list-style:none}.cons{margin-top:6px;padding-left:10px;border-left:2px solid rgba(229,56,59,.4)}.cons li{font-size:13px;margin:2px 0}
+small{color:var(--sub);font-size:12px}.more{display:inline-block;margin-top:6px;font-size:12px;color:var(--sub)}
+.list li{display:flex;gap:10px;padding:8px 0;border-top:1px solid var(--line)}.list li:first-child{border-top:0}.list li>div{min-width:0;flex:1}
+.list .n,.list .t{color:var(--sub);font-variant-numeric:tabular-nums;flex:none;width:22px;font-size:12.5px;padding-top:1px}.list .t{width:40px}
+.cmt{text-align:right;flex:none!important;display:flex;flex-direction:column;font-variant-numeric:tabular-nums}.cmt em{font-size:12px}
+.flag{background:var(--pill-on);color:var(--pill-on-tx);font-size:11px;font-weight:700;border-radius:6px;padding:1px 6px;margin-right:6px}.flag.red{background:var(--up);color:#fff}
+.feed{max-height:760px;overflow-y:auto}
+table{width:100%;border-collapse:collapse}th{font-size:12px;color:var(--sub);font-weight:500;text-align:left;padding:6px 8px;border-bottom:1px solid var(--line);white-space:nowrap}
+td{padding:9px 8px;border-top:1px solid var(--line);vertical-align:top}td.n{color:var(--sub);width:24px}td.w{width:170px}td.w b{font-size:15px}td.w div{margin-top:4px;display:flex;gap:4px;flex-wrap:wrap}
+td.num{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap;width:70px}td.sm{font-size:12.5px}
+.also{display:block}.rep{font-size:13px;margin-bottom:3px}
+.trends{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));column-gap:20px}.trends li{display:block}.trends li.dim{opacity:.55}
+.trends .pill-on{margin-left:6px}.cloud{display:flex;flex-wrap:wrap;gap:5px}
+.warn{background:rgba(217,119,6,.12);color:#b45309;border-radius:10px;padding:6px 10px;font-size:12.5px;margin-bottom:8px}
+.guide ol{padding-left:20px;margin:8px 0}.guide li{margin:4px 0}code{background:var(--soft);padding:1px 5px;border-radius:5px;font-size:12px}.sm{font-size:12px;color:var(--sub)}
+.foot p{color:var(--sub);font-size:13px}.foot summary{cursor:pointer;font-weight:600}.log{font-size:12px;color:var(--sub)}
+.hide{display:none!important}
+.btn{border:0;background:var(--pill-on);color:var(--pill-on-tx);border-radius:999px;padding:5px 12px;font:inherit;font-size:12.5px;font-weight:600;cursor:pointer}
+.btn:disabled{opacity:.5;cursor:default}.publink{text-decoration:underline}#stale{margin:8px 0 0}
+.mgr{background:var(--soft);border-radius:14px;padding:12px;margin-bottom:12px}.addrow{display:flex;gap:6px}
+.addrow input{flex:1;min-width:0;border:1px solid var(--line);background:var(--card);color:var(--tx);border-radius:999px;padding:6px 12px;font:inherit}
+#acctMsg{margin:6px 2px;min-height:1em}.acct{display:flex;flex-wrap:wrap;gap:6px}
+.acct .a{background:var(--card);border-radius:999px;padding:3px 4px 3px 10px;font-size:12.5px;display:inline-flex;align-items:center;gap:6px}
+.acct .a small{font-size:11.5px}.acct .a .bad{color:#b45309}.acct .x{border:0;background:var(--soft);color:var(--sub);border-radius:50%;width:20px;height:20px;cursor:pointer;line-height:1}
+.mgr p{margin:8px 2px 0}
+@media (max-width:900px){main{grid-template-columns:1fr}td.w{width:auto}th:nth-child(5),td:nth-child(5){display:none}}
+@media (max-width:560px){th:nth-child(6),td:nth-child(6){display:none}header{position:static}main{padding:12px 16px 40px}}
+</style></head><body data-built="2026-11-29T02:48" data-public="1">
+<header><div class="hd"><h1>보수 이슈 레이더</h1><span class="when">2026-11-29 02:48 갱신<span id="ago"></span> · 15분마다 · 기사 1,400건 (최근 6시간 11)</span>
+</div>
+<div id="stale" class="warn hide"></div>
+<nav><a href="#issues">큰 이슈</a><a href="#kw">급상승 키워드</a><a href="#hot">댓글 폭발</a><a href="#brk">속보·단독</a><a href="#ig">인스타</a><a href="#tr">검색 트렌드</a></nav>
+<div class="filters"><button class="f on" data-f="">전체</button><button class="f" data-f="친북·대북"><i style="background:#E5383B"></i>친북·대북</button><button class="f" data-f="반미·외교안보"><i style="background:#1D63D8"></i>반미·외교안보</button><button class="f" data-f="대통령·고위층 의혹"><i style="background:#d97706"></i>대통령·고위층 의혹</button><button class="f" data-f="입법 독주·사법"><i style="background:#7C3AED"></i>입법 독주·사법</button><button class="f" data-f="포퓰리즘·민생 정책"><i style="background:#16a34a"></i>포퓰리즘·민생 정책</button><button class="f" data-f="정부·여권 인물"><i style="background:#6b7280"></i>정부·여권 인물</button></div></header>
+<main>
+<section id="issues" class="card"><h2>지금 큰 이슈 <small>네이버 정치 헤드라인 묶음 · 보수 관심도로 다시 줄 세움</small></h2><div class="issue" data-c="대통령·고위층 의혹|입법 독주·사법"><div class="rk">1</div><div class="body">
+<a class="ttl" href="https://n.news.naver.com/mnews/article/023/0004012276" target="_blank">대전으로 간 국힘 장외집회... “조희대 탄핵은 법원 인사 겨냥”</a>
+<div class="lede">민주당 “장 대표, 막말 당장 멈추라” 국민의힘 장동혁 대표와 정점식 원내대표 등 당 지도부는 28일 대전에서 장외 집회를 열고 가동을 앞둔 ‘조작 기소 특검’과 더불어민주당의 조희대 대법원장 탄핵 추진을 규탄했다.</div>
+<div class="meta"><span class="cat"><i style="background:#d97706"></i>대통령·고위층 의혹</span><span class="cat"><i style="background:#7C3AED"></i>입법 독주·사법</span><span class="tag">관련기사 37</span>
+<span class="tag">댓글 223 <em class="up">시간당 +2</em></span><span class="lean"><b class="c">보수 11</b><b class="p">진보 1</b></span></div>
+<ul class="cons"><li><a href="https://n.news.naver.com/mnews/article/023/0004012276" target="_blank">대전으로 간 국힘 장외집회... “조희대 탄핵은 법원 인사 겨냥”</a> <small>조선일보</small></li><li><a href="https://n.news.naver.com/mnews/article/009/0005770273" target="_blank">대전 찾은 장동혁, 李 향해 “교도소 담장에 탄핵이라는 만볼트짜리 철조망 깔아야”</a> <small>매일경제</small></li><li><a href="https://n.news.naver.com/mnews/article/366/0001207929" target="_blank">장동혁 “조희대보다 李 먼저 탄핵해야“…국힘, 대전서 규탄 대회</a> <small>조선비즈</small></li></ul>
+<a class="more" href="https://news.naver.com/cluster/c_202611260050_00000186/section/100?oid=023&amp;aid=0004012276" target="_blank">네이버에서 관련기사 전체 보기 ›</a>
+</div></div><div class="issue" data-c="정부·여권 인물|보수 진영 동향"><div class="rk">2</div><div class="body">
+<a class="ttl" href="https://n.news.naver.com/mnews/article/655/0000033736" target="_blank">장동혁 &quot;&#x27;무자격&#x27; 대통령에 &#x27;무자격&#x27; 내각… 끌려내려오는 일만 남았다&quot;</a>
+<div class="lede">장동혁 국민의힘 대표, SNS 통해 내각 후보자들 줄줄이 직격 &quot;무법·무책임·무능력의 &#x27;이재명 개성&#x27;만 넘쳐나는 개각&quot; 맹비난 장동혁 국민의힘 대표가 페이스북을 통해 정부의 개각 인선을 강도 높게 비판하며, 장관 후</div>
+<div class="meta"><span class="cat"><i style="background:#6b7280"></i>정부·여권 인물</span><span class="cat"><i style="background:#9ca3af"></i>보수 진영 동향</span><span class="tag">관련기사 38</span>
+<span class="tag">댓글 444 <em class="up">시간당 +2</em></span><span class="lean"><b class="c">보수 10</b><b class="p">진보 1</b></span></div>
+<ul class="cons"><li><a href="https://n.news.naver.com/mnews/article/029/0003061611" target="_blank">강금실·한준호·홍익표 청문회 전운…국힘 “무자격 내각” vs 민주 “낡은 색깔론”</a> <small>디지털타임스</small></li><li><a href="https://n.news.naver.com/mnews/article/021/0002836158" target="_blank">장동혁 “무자격 대통령에 무자격 내각” …강금실·한준호 청문회 앞두고 여야 격돌</a> <small>문화일보</small></li><li><a href="https://n.news.naver.com/mnews/article/011/0004687161" target="_blank">강금실·한준호 등 청문 후보자 정조준한 野 “무자격 내각”…與 “마녀사냥”</a> <small>서울경제</small></li></ul>
+<a class="more" href="https://news.naver.com/cluster/c_202611281510_00000064/section/100?oid=655&amp;aid=0000033736" target="_blank">네이버에서 관련기사 전체 보기 ›</a>
+</div></div><div class="issue" data-c="정부·여권 인물"><div class="rk">3</div><div class="body">
+<a class="ttl" href="https://n.news.naver.com/mnews/article/055/0001406580" target="_blank">&#x27;최민희 중징계&#x27; 묻자 침묵…국회 밖으로까지 파장</a>
+<div class="lede">민주당에선 최민희 최고위원 중징계를 둘러싼 파장이 국회 밖으로까지 확산하고 있습니다. 거리로 나선 친청계 지지자들은 김민석 대표의 사퇴를 촉구했습니다. 김 대표는 이틀째 대응을 자제하는 모습입니다. 보도에 한성희 기</div>
+<div class="meta"><span class="cat"><i style="background:#6b7280"></i>정부·여권 인물</span><span class="tag">관련기사 138</span>
+<span class="tag">댓글 97 <em class="up">시간당 +9</em></span><span class="lean"><b class="c">보수 12</b><b class="p">진보 9</b></span></div>
+<ul class="cons"><li><a href="https://n.news.naver.com/mnews/article/023/0004012240" target="_blank">최민희 당원권 2년 정지… 김민석 ‘신천지’ 경징계 땐 전면전 불가피</a> <small>조선일보</small></li><li><a href="https://n.news.naver.com/mnews/article/025/0003568515" target="_blank">최민희 ‘당원권 정지 2년’ 최고위원직 박탈…정청래 강력 반발</a> <small>중앙일보</small></li><li><a href="https://n.news.naver.com/mnews/article/022/0004178784" target="_blank">최민희 중징계에 친청계 “김민석은?”…요원해진 與 내홍 봉합</a> <small>세계일보</small></li></ul>
+<a class="more" href="https://news.naver.com/cluster/c_202611250510_00001269/section/100?oid=055&amp;aid=0001406580" target="_blank">네이버에서 관련기사 전체 보기 ›</a>
+</div></div><div class="issue" data-c="친북·대북|반미·외교안보"><div class="rk">4</div><div class="body">
+<a class="ttl" href="https://n.news.naver.com/mnews/article/422/0000930877" target="_blank">김정은 또 &#x27;방중 임박설&#x27; 대두…G20 앞 전략적 소통 강화?</a>
+<div class="lede">김정은 북한 국무위원장이 다음 달 미국에서 열리는 주요 20개국 정상회의를 앞두고 또다시 중국을 찾을 가능성이 제기됐습니다. 북한은 내년 국정운영 방향을 결정할 노동당 중앙위원회 전원회의를 다음 달 소집하겠다고 예고</div>
+<div class="meta"><span class="cat"><i style="background:#E5383B"></i>친북·대북</span><span class="cat"><i style="background:#1D63D8"></i>반미·외교안보</span><span class="tag">관련기사 61</span>
+<span class="tag">댓글 9</span><span class="lean"><b class="c">보수 15</b><b class="p">진보 5</b></span></div>
+<ul class="cons"><li><a href="https://n.news.naver.com/mnews/article/029/0003061604" target="_blank">김정은 또 중국 가나…국정원 “북중 동향 예의주시”</a> <small>디지털타임스</small></li><li><a href="https://n.news.naver.com/mnews/article/215/0001274275" target="_blank">북미 정상 만남 불발 뒤 北김정은 추가 방중설…국정원 &quot;여러 동향 주시&quot;</a> <small>한국경제TV</small></li><li><a href="https://n.news.naver.com/mnews/article/448/0000653934" target="_blank">김정은 조만간 또 방중 가능성…국정원 &quot;여러 동향 주시&quot;</a> <small>TV조선</small></li></ul>
+<a class="more" href="https://news.naver.com/cluster/c_202611272110_00000002/section/100?oid=422&amp;aid=0000930877" target="_blank">네이버에서 관련기사 전체 보기 ›</a>
+</div></div><div class="issue" data-c="정부·여권 인물"><div class="rk">5</div><div class="body">
+<a class="ttl" href="https://n.news.naver.com/mnews/article/015/0005359231" target="_blank">&quot;지금껏 법사위 잘못 운영&quot;…박홍근 &#x27;버럭&#x27;에 서영교 당황 [영상]</a>
+<div class="lede">법사위를 몇 년간 했고 법사위원장도 했지만 (이런 경우는) 처음 봤습니다.&quot; (서영교 법사위원장) &quot;그렇게 보면 법사위가 그동안 제대로 작동이 안 된 것입니다.&quot; (박홍근 기획예산처 장관) 초유의 사태다. 박홍근</div>
+<div class="meta"><span class="cat"><i style="background:#6b7280"></i>정부·여권 인물</span><span class="tag">관련기사 75</span>
+<span class="tag">3시간 내 1건</span><span class="tag">댓글 39</span><span class="lean"><b class="c">보수 17</b><b class="p">진보 7</b></span></div>
+<ul class="cons"><li><a href="https://n.news.naver.com/mnews/article/015/0005359231" target="_blank">&quot;지금껏 법사위 잘못 운영&quot;…박홍근 &#x27;버럭&#x27;에 서영교 당황 [영상]</a> <small>한국경제</small></li><li><a href="https://n.news.naver.com/mnews/article/025/0003568490" target="_blank">서영교·박홍근 법사위 언쟁…“얼굴 화끈” 국힘, 서영교 편들었다</a> <small>중앙일보</small></li><li><a href="https://n.news.naver.com/mnews/article/020/0003765750" target="_blank">서영교에 목청 높인 박홍근 “법사위 그동안 제대로 작동 안돼”</a> <small>동아일보</small></li></ul>
+<a class="more" href="https://news.naver.com/cluster/c_202611271510_00000001/section/100?oid=015&amp;aid=0005359231" target="_blank">네이버에서 관련기사 전체 보기 ›</a>
+</div></div><div class="issue" data-c="대통령·고위층 의혹|정부·여권 인물"><div class="rk">6</div><div class="body">
+<a class="ttl" href="https://n.news.naver.com/mnews/article/056/0012303168" target="_blank">이 대통령, ‘병원 성형 후기 조작’에 “중대한 불법행위”</a>
+<div class="lede">이재명 대통령은 일부 병원의 ‘후기 조작’ 행태에 관해 “개인정보를 악용해 국민을 속이고 부당한 이익을 챙긴 중대한 불법행위”라고 비판했습니다. 이 대통령은 오늘(28일) SNS에 경찰이 이 같은 혐의로 병원장과 광</div>
+<div class="meta"><span class="cat"><i style="background:#d97706"></i>대통령·고위층 의혹</span><span class="cat"><i style="background:#6b7280"></i>정부·여권 인물</span><span class="tag">관련기사 31</span>
+<span class="tag">댓글 3</span><span class="lean"><b class="c">보수 10</b><b class="p">진보 2</b></span></div>
+<ul class="cons"><li><a href="https://n.news.naver.com/mnews/article/022/0004178807" target="_blank">이 대통령 “성형후기 조작, 중대한 불법행위…국민 기만 범죄, 엄정 대응”</a> <small>세계일보</small></li><li><a href="https://n.news.naver.com/mnews/article/015/0005359313" target="_blank">&quot;기가 막힌다&quot;…가짜 성형 후기에 李 대통령 &#x27;엄정 대응&#x27;</a> <small>한국경제</small></li><li><a href="https://n.news.naver.com/mnews/article/011/0004687179" target="_blank">李대통령, 성형 가짜 후기 조작에 “기가 막힌다”</a> <small>서울경제</small></li></ul>
+<a class="more" href="https://news.naver.com/cluster/c_202611261210_00000012/section/100?oid=056&amp;aid=0012303168" target="_blank">네이버에서 관련기사 전체 보기 ›</a>
+</div></div><div class="issue" data-c="정부·여권 인물|보수 진영 동향"><div class="rk">7</div><div class="body">
+<a class="ttl" href="https://n.news.naver.com/mnews/article/448/0000654002" target="_blank">與 계파 전면전, 결국 공천권 싸움?[뉴스더]</a>
+<div class="lede">최민희 최고위원 중징계 결정을 계기로 민주당의 내분이 정점으로 치닫는 분위기입니다. 이미 갈등을 봉합하기엔 너무 멀리 와버렸단 말까지 나오는데요. 민주당 내부 갈등이 쉽게 끝나기 어려워 보이는 이유가 무엇인지, 정치</div>
+<div class="meta"><span class="cat"><i style="background:#6b7280"></i>정부·여권 인물</span><span class="cat"><i style="background:#9ca3af"></i>보수 진영 동향</span><span class="tag">관련기사 5</span>
+<span class="tag">댓글 49</span><span class="lean"><b class="c">보수 2</b><b class="p">진보 0</b></span></div>
+<ul class="cons"><li><a href="https://n.news.naver.com/mnews/article/448/0000654002" target="_blank">[뉴스더] 與 계파 전면전, 결국 공천권 싸움?</a> <small>TV조선</small></li><li><a href="https://n.news.naver.com/mnews/article/057/0001980298" target="_blank">[뉴스추적] 여야 징계 내홍 폭발…장외 여론전</a> <small>MBN</small></li></ul>
+<a class="more" href="https://news.naver.com/cluster/c_202611281710_00000011/section/100?oid=448&amp;aid=0000654002" target="_blank">네이버에서 관련기사 전체 보기 ›</a>
+</div></div><div class="issue" data-c="보수 진영 동향"><div class="rk">8</div><div class="body">
+<a class="ttl" href="https://n.news.naver.com/mnews/article/056/0012302872" target="_blank">“한동훈 다시 징계” “우재준 제거 상의”…국민의힘 내홍 ‘강대강 충돌’</a>
+<div class="lede">국민의힘에선 조작 징계 의혹으로 충돌하고 있습니다. 장동혁 대표는 한동훈 의원이 복당하더라도 다시 징계할 수 있다고 경고했고, 친한동훈계는 대표의 개입 정황이 나왔는데도 발뺌하고 있다고 비판했습니다. 박효빈 기자입니</div>
+<div class="meta"><span class="cat"><i style="background:#9ca3af"></i>보수 진영 동향</span><span class="tag">관련기사 23</span>
+<span class="tag">댓글 21</span><span class="lean"><b class="c">보수 8</b><b class="p">진보 3</b></span></div>
+<ul class="cons"><li><a href="https://n.news.naver.com/mnews/article/025/0003568498" target="_blank">“또 징계”“사퇴하라”…국힘 ‘조작징계’ 수렁에 관망파 요지부동</a> <small>중앙일보</small></li><li><a href="https://n.news.naver.com/mnews/article/025/0003568481" target="_blank">장동혁 “한동훈 징계 취소돼도 재징계 가능…복당 반대 입장 불변”</a> <small>중앙일보</small></li><li><a href="https://n.news.naver.com/mnews/article/011/0004687100" target="_blank">‘제명 효력 정지’ 가처분 검토하는 韓…張 “복당해도 다시징계”</a> <small>서울경제</small></li></ul>
+<a class="more" href="https://news.naver.com/cluster/c_202611261030_00000009/section/100?oid=056&amp;aid=0012302872" target="_blank">네이버에서 관련기사 전체 보기 ›</a>
+</div></div><div class="issue" data-c="정부·여권 인물"><div class="rk">9</div><div class="body">
+<a class="ttl" href="https://n.news.naver.com/mnews/article/056/0012303150" target="_blank">이 대통령 “과학인 도전에 정부도 원팀…지방주도성장 현실로”</a>
+<div class="lede">이재명 대통령은 “과학기술인과 기업인들이 과감하게 도전하고 중앙정부와 지방정부가 원 팀으로 함께 할 때 지방주도성장의 비전이 현실이 될 수 있을 것”이라며 천연물 바이오산업 육성 의지를 밝혔습니다. 이 대통령은 오늘</div>
+<div class="meta"><span class="cat"><i style="background:#6b7280"></i>정부·여권 인물</span><span class="tag">관련기사 27</span>
+<span class="tag">댓글 0</span><span class="lean"><b class="c">보수 5</b><b class="p">진보 2</b></span></div>
+<ul class="cons"><li><a href="https://n.news.naver.com/mnews/article/011/0004687163" target="_blank">李대통령 “강원 천연물 혁신센터 신속 추진”…강릉 시장서 민생 점검도</a> <small>서울경제</small></li><li><a href="https://n.news.naver.com/mnews/article/057/0001980282" target="_blank">이 대통령 &quot;과학인 과감히 도전해야…정부 원팀으로 지방주도성장 현실화&quot;</a> <small>MBN</small></li><li><a href="https://n.news.naver.com/mnews/article/366/0001207928" target="_blank">李대통령, KIST 강릉분원 찾아 “천연물 혁신센터 추진” 약속</a> <small>조선비즈</small></li></ul>
+<a class="more" href="https://news.naver.com/cluster/c_202611281640_00000002/section/100?oid=056&amp;aid=0012303150" target="_blank">네이버에서 관련기사 전체 보기 ›</a>
+</div></div><div class="issue" data-c=""><div class="rk">10</div><div class="body">
+<a class="ttl" href="https://n.news.naver.com/mnews/article/055/0001406499" target="_blank">12·3 계엄 극복 경험 국제회의서 알린 조정식 의장…&quot;의회가 최후 보루&quot;</a>
+<div class="lede">▲ 조정식 국회의장(왼쪽 세번째)이 27일(현지시간) 호주 캔버라 국회의사당에서 열린 믹타 국회의장회의 제4세션을 주재하고 있다. 조정식 국회의장이 국제회의에서 12·3 비상계엄 위기를 극복한 한국 민주주의의 경험을</div>
+<div class="meta"><span class="tag">관련기사 10</span>
+<span class="tag">댓글 0</span></div>
+
+<a class="more" href="https://news.naver.com/cluster/c_202611181940_00000877/section/100?oid=055&amp;aid=0001406499" target="_blank">네이버에서 관련기사 전체 보기 ›</a>
+</div></div></section>
+<section id="brk" class="card"><h2>속보·단독 <small>최근 3시간 · 관심 분류만</small></h2><ul class="list feed"><li>최근 3시간 해당 기사 없음</li></ul></section>
+<section id="kw" class="card wide"><h2>급상승 키워드 <small>최근 6시간 기사 수 · 평소(그 전 48시간) 대비 배수</small></h2>
+<table><thead><tr><th></th><th>키워드</th><th>6시간</th><th>평소 대비</th><th>보수/진보 매체</th><th>대표 기사</th></tr></thead><tbody><tr data-c="반미·외교안보"><td class="n">1</td>
+<td class="w"><b>명예직</b><small class="also">무보수 · 강금실</small><div><span class="cat"><i style="background:#1D63D8"></i>반미·외교안보</span></div></td>
+<td class="num">3</td><td class="num"><em class="up">×8.0</em></td><td class="num sm">4 / 1</td><td><div class="rep"><a href="https://www.hankyung.com/article/2026112862617" target="_blank">&#x27;친중&#x27; 공세에 입 연 강금실…&quot;박근혜 정부 때 무보수 명예직&quot;</a> <small>한국경제 21:23</small></div><div class="rep"><a href="https://news.google.com/rss/articles/CBMiVkFVX3lxTE05NG91NjEtSWdGWWl3WjBMRmxTcjc2cHktVW5jYUxmWk1vbTFFcHpkOEJIQlA1dktCcWViVjd0VlQzUFNjWFdrUUdWR0phRG1qay15WnZ3?oc=5" target="_blank">강금실 ‘中 특별고문’ 입 열었다…“朴정부 때 맡은 무보수 명예직”</a> <small>중앙일보 21:09</small></div></td></tr><tr data-c="정부·여권 인물"><td class="n">2</td>
+<td class="w"><b>이재명</b><div><span class="cat"><i style="background:#6b7280"></i>정부·여권 인물</span><span class="pill-on">보수 매체 집중</span></div></td>
+<td class="num">3</td><td class="num"><em class="">×0.6</em></td><td class="num sm">8 / 0</td><td><div class="rep"><a href="https://www.pennmike.com/news/articleView.html?idxno=133013" target="_blank">강금실 前법무부 장관 국정원장 후보 지명에 &quot;이재명이 중국 공산당 사주 받았는지 의심할 수밖에&quot; 성명</a> <small>펜앤드마이크 22:41</small></div><div class="rep"><a href="https://www.pennmike.com/news/articleView.html?idxno=132967" target="_blank">[여론조사] 다시 하락? 호남서도 비상! &quot;이재명 레임덕 확실하다&quot; [&#x27;선우윤호의 MZ레지스탕스&#x27;ㅣ출연&quot; 김세종 최제일]</a> <small>펜앤드마이크 22:00</small></div></td></tr></tbody></table></section>
+<section id="hot" class="card"><h2>댓글 폭발 정치 기사 <small>네이버 언론사별 댓글 많은 뉴스 중 정치 기사</small></h2><ul class="list"><li data-c="정부·여권 인물"><span class="n">1</span><div><a href="https://n.news.naver.com/article/214/0001538682?ntype=RANKING" target="_blank">&#x27;최민희 중징계&#x27; 당내 후폭풍‥&quot;김민석 사퇴&quot; 집회까지</a>
+<div class="meta"><small>MBC</small><span class="cat"><i style="background:#6b7280"></i>정부·여권 인물</span></div></div><div class="cmt"><b>1,278</b><em class="up">+73/시간</em></div></li><li data-c="반미·외교안보|보수 진영 동향"><span class="n">2</span><div><a href="https://n.news.naver.com/article/001/0016468963?ntype=RANKING" target="_blank">강금실 &quot;中특별고문, 박근혜 정부 시기 친선차원 무보수 명예직&quot;</a>
+<div class="meta"><small>연합뉴스</small><span class="cat"><i style="background:#1D63D8"></i>반미·외교안보</span><span class="cat"><i style="background:#9ca3af"></i>보수 진영 동향</span></div></div><div class="cmt"><b>728</b><em class="up">+36/시간</em></div></li><li data-c="정부·여권 인물"><span class="n">3</span><div><a href="https://n.news.naver.com/article/023/0004012267?ntype=RANKING" target="_blank">李대통령 “성형후기 조작 기막혀... 국민 기만 범죄 엄정 대응”</a>
+<div class="meta"><small>조선일보</small><span class="cat"><i style="background:#6b7280"></i>정부·여권 인물</span></div></div><div class="cmt"><b>998</b><em class="up">+23/시간</em></div></li><li data-c="입법 독주·사법|정부·여권 인물"><span class="n">4</span><div><a href="https://n.news.naver.com/article/469/0000968302?ntype=RANKING" target="_blank">&quot;조희대보다 이재명 먼저 탄핵해야&quot; 국힘, 이번엔 대전서 이 대통령 규탄</a>
+<div class="meta"><small>한국일보</small><span class="cat"><i style="background:#7C3AED"></i>입법 독주·사법</span><span class="cat"><i style="background:#6b7280"></i>정부·여권 인물</span></div></div><div class="cmt"><b>460</b><em class="up">+18/시간</em></div></li><li data-c="정부·여권 인물|보수 진영 동향"><span class="n">5</span><div><a href="https://n.news.naver.com/article/022/0004178824?ntype=RANKING" target="_blank">장동혁 “‘무자격’ 대통령, ‘무자격’ 내각”… 與 “마녀사냥” 반박</a>
+<div class="meta"><small>세계일보</small><span class="cat"><i style="background:#6b7280"></i>정부·여권 인물</span><span class="cat"><i style="background:#9ca3af"></i>보수 진영 동향</span></div></div><div class="cmt"><b>320</b><em class="up">+10/시간</em></div></li><li data-c="입법 독주·사법"><span class="n">6</span><div><a href="https://n.news.naver.com/article/028/0002834382?ntype=RANKING" target="_blank">대법원은 왜 12·3을 내란이라 쓰지 못했나</a>
+<div class="meta"><small>한겨레</small><span class="cat"><i style="background:#7C3AED"></i>입법 독주·사법</span></div></div><div class="cmt"><b>929</b><em class="up">+9/시간</em></div></li><li data-c="입법 독주·사법"><span class="n">7</span><div><a href="https://n.news.naver.com/article/088/0001042839?ntype=RANKING" target="_blank">&#x27;노무현 사위&#x27; 곽상언 &quot;사유도 모르겠는 조희대 탄핵, 추진하면 안돼&quot;</a>
+<div class="meta"><small>매일신문</small><span class="cat"><i style="background:#7C3AED"></i>입법 독주·사법</span></div></div><div class="cmt"><b>663</b><em class="up">+9/시간</em></div></li><li data-c="보수 진영 동향"><span class="n">8</span><div><a href="https://n.news.naver.com/article/033/0000053699?ntype=RANKING" target="_blank">장동혁 “한동훈 징계취소 확정되면 당원권 3년 정지 다시 하면 돼”</a>
+<div class="meta"><small>주간경향</small><span class="cat"><i style="background:#9ca3af"></i>보수 진영 동향</span></div></div><div class="cmt"><b>859</b><em class="up">+6/시간</em></div></li><li data-c="정부·여권 인물"><span class="n">9</span><div><a href="https://n.news.naver.com/article/081/0003704091?ntype=RANKING" target="_blank">동해에 아시아 최대 AI 데이터센터…이 대통령 “정부 모든 역량 동원”</a>
+<div class="meta"><small>서울신문</small><span class="cat"><i style="background:#6b7280"></i>정부·여권 인물</span></div></div><div class="cmt"><b>430</b><em class="up">+6/시간</em></div></li><li data-c="입법 독주·사법|보수 진영 동향"><span class="n">10</span><div><a href="https://n.news.naver.com/article/366/0001207929?ntype=RANKING" target="_blank">장동혁 “조희대보다 李 먼저 탄핵해야“…국힘, 대전서 규탄 대회</a>
+<div class="meta"><small>조선비즈</small><span class="cat"><i style="background:#7C3AED"></i>입법 독주·사법</span><span class="cat"><i style="background:#9ca3af"></i>보수 진영 동향</span></div></div><div class="cmt"><b>181</b><em class="up">+5/시간</em></div></li><li data-c="정부·여권 인물"><span class="n">11</span><div><a href="https://n.news.naver.com/article/366/0001207927?ntype=RANKING" target="_blank">김민석 “민주당은 원래 젊음이 주도하던 정당…청소년 목소리 듣겠다”</a>
+<div class="meta"><small>조선비즈</small><span class="cat"><i style="background:#6b7280"></i>정부·여권 인물</span></div></div><div class="cmt"><b>170</b><em class="up">+4/시간</em></div></li><li data-c="친북·대북"><span class="n">12</span><div><a href="https://n.news.naver.com/article/448/0000653961?ntype=RANKING" target="_blank">홍익표, 北 3대 독재 세습에 &quot;틀렸다고만 할 수 없다. 불가피한 면도&quot;</a>
+<div class="meta"><small>TV조선</small><span class="cat"><i style="background:#E5383B"></i>친북·대북</span></div></div><div class="cmt"><b>503</b><em class="up">+3/시간</em></div></li><li data-c="반미·외교안보|보수 진영 동향"><span class="n">13</span><div><a href="https://n.news.naver.com/article/656/0000193818?ntype=RANKING" target="_blank">강금실, 中 특별고문 이력 해명…&quot;박근혜 정부 때 무보수 명예직&quot;</a>
+<div class="meta"><small>대전일보</small><span class="cat"><i style="background:#1D63D8"></i>반미·외교안보</span><span class="cat"><i style="background:#9ca3af"></i>보수 진영 동향</span></div></div><div class="cmt"><b>184</b><em class="up">+3/시간</em></div></li><li data-c="정부·여권 인물|보수 진영 동향"><span class="n">14</span><div><a href="https://n.news.naver.com/article/661/0000087198?ntype=RANKING" target="_blank">장동혁, 개각 후보자 4명에 “무자격 내각”… 민주당 “답정너식 마녀사냥”</a>
+<div class="meta"><small>JIBS</small><span class="cat"><i style="background:#6b7280"></i>정부·여권 인물</span><span class="cat"><i style="background:#9ca3af"></i>보수 진영 동향</span></div></div><div class="cmt"><b>51</b><em class="up">+3/시간</em></div></li><li data-c="입법 독주·사법|보수 진영 동향"><span class="n">15</span><div><a href="https://n.news.naver.com/article/262/0000019890?ntype=RANKING" target="_blank">헌재가 부정한 尹 계엄 명분…2년 뒤 집권당 권한 논쟁으로 되살아나다</a>
+<div class="meta"><small>신동아</small><span class="cat"><i style="background:#7C3AED"></i>입법 독주·사법</span><span class="cat"><i style="background:#9ca3af"></i>보수 진영 동향</span></div></div><div class="cmt"><b>26</b><em class="up">+3/시간</em></div></li><li data-c="보수 진영 동향"><span class="n">16</span><div><a href="https://n.news.naver.com/article/056/0012303108?ntype=RANKING" target="_blank">2030 남성은 정말 보수화 됐을까?</a>
+<div class="meta"><small>KBS</small><span class="cat"><i style="background:#9ca3af"></i>보수 진영 동향</span></div></div><div class="cmt"><b>598</b><em class="up">+2/시간</em></div></li><li data-c="반미·외교안보|보수 진영 동향"><span class="n">17</span><div><a href="https://n.news.naver.com/article/088/0001042828?ntype=RANKING" target="_blank">李대통령 &#x27;판다 요청&#x27;에 中 난색…국힘 &quot;민망함은 국민 몫&quot;</a>
+<div class="meta"><small>매일신문</small><span class="cat"><i style="background:#1D63D8"></i>반미·외교안보</span><span class="cat"><i style="background:#9ca3af"></i>보수 진영 동향</span></div></div><div class="cmt"><b>469</b><em class="up">+2/시간</em></div></li><li data-c="보수 진영 동향"><span class="n">18</span><div><a href="https://n.news.naver.com/article/655/0000033736?ntype=RANKING" target="_blank">장동혁 &quot;&#x27;무자격&#x27; 대통령에 &#x27;무자격&#x27; 내각… 끌려내려오는 일만 남았다&quot;</a>
+<div class="meta"><small>CJB청주방송</small><span class="cat"><i style="background:#9ca3af"></i>보수 진영 동향</span></div></div><div class="cmt"><b>444</b><em class="up">+2/시간</em></div></li><li data-c="입법 독주·사법"><span class="n">19</span><div><a href="https://n.news.naver.com/article/025/0003568535?ntype=RANKING" target="_blank">“조희대 탄핵은 위험한 선례” 세계변호사협회도 우려 표명</a>
+<div class="meta"><small>중앙일보</small><span class="cat"><i style="background:#7C3AED"></i>입법 독주·사법</span></div></div><div class="cmt"><b>353</b><em class="up">+2/시간</em></div></li><li data-c="정부·여권 인물"><span class="n">20</span><div><a href="https://n.news.naver.com/article/032/0003485611?ntype=RANKING" target="_blank">이 대통령 “국민 기만 범죄, 기가 막힌다”···성형후기 조작 병원장들 검거에 “경찰 수고 많으셨다”</a>
+<div class="meta"><small>경향신문</small><span class="cat"><i style="background:#6b7280"></i>정부·여권 인물</span></div></div><div class="cmt"><b>428</b><em class="up">+1/시간</em></div></li></ul></section>
+<section id="ig" class="card"><h2>인스타 참고 계정</h2><p class="sm">인스타 참고 계정 연결을 준비하고 있습니다.</p></section>
+<section id="tr" class="card wide"><h2>구글 검색 급상승 <small>한국 · 정치 관련만 진하게</small></h2><ul class="list trends"><li class="dim"><b>엘체 대 아틀레티코</b> <small>2000+</small>
+<div class="rep"><a href="https://www.chosun.com/sports/world-football/2026/11/29/GIYDGNZRGY3TOMLBGA4DGNJTGM/" target="_blank">&#x27;이강인 선발 출격&#x27; 아틀레티코, 레알 마드리드 제치고 2위 오를 기회...&#x27;16위&#x27; 엘체 잡고 바르셀로나와 승점 2점 차 만들까</a> <small>조선일보</small></div></li><li class="dim"><b>manchester united</b> <small>100+</small>
+<div class="rep"><a href="https://www.bbc.com/sport/football/live/cmz9823qpznet" target="_blank">Match Summary</a> <small>BBC</small></div></li><li class="dim"><b>비정규직</b> <small>100+</small>
+<div class="rep"><a href="https://imnews.imbc.com/replay/2026/nwdesk/article/6869197_37004.html" target="_blank">또 급식 대신 빵‥10년째 파업에 학교 3곳 중 1곳 점심 멈췄다</a> <small>MBC 뉴스</small></div></li><li class="dim"><b>hamburg vs bayern</b> <small>100+</small>
+<div class="rep"><a href="https://www.reutersconnect.com/item/sc-paderborn-07-vs-fc-schalke-04/dGFnOnJldXRlcnMuY29tLDIwMjY6bmV3c21sX0RQQUFQSVMyNjExMjhYOTlYNDE4MzUy" target="_blank">Licensable picture: SC Paderborn 07 vs. FC Schalke 04</a> <small>Reuters Connect</small></div></li><li class="dim"><b>맨유 경기</b> <small>200+</small>
+</li><li class="dim"><b>바이에른 뮌헨</b> <small>500+</small>
+<div class="rep"><a href="https://www.mt.co.kr/sports/2026/11/29/202611290124774747O" target="_blank">&#x27;키미히, 상대 머리채 콱&#x27; 충격 퇴장 바이에른, 함부르크 원정서 0-0 무승부...김민재 풀탕임에도 선두 탈환 실패 - 머니투데이</a> <small>머니투데이</small></div></li><li class="dim"><b>black tv</b> <small>500+</small>
+<div class="rep"><a href="https://www.cnn.com/cnn-underscored/deals/black-friday-tv-deals-2026-11-27" target="_blank">I test TVs for a living. Here are the 25 best Black Friday TV deals still available</a> <small>CNN</small></div></li><li class="dim"><b>쾰른 대 엘버스베르크</b> <small>200+</small>
+<div class="rep"><a href="https://www.bbc.com/sport/football/live/crwy47jywz75t" target="_blank">Köln vs Elversberg: German Bundesliga stats &amp; head-to-head</a> <small>BBC</small></div></li><li class="dim"><b>man utd đấu với brentford</b> <small>500+</small>
+<div class="rep"><a href="https://thethaovanhoa.vn/hang-thu-tham-hoa-mu-thua-dam-brentford-0-4-trong-ngay-pochettino-ra-mat-old-trafford-20261127162135592.htm" target="_blank">Hàng thủ thảm họa, MU thua đậm Brentford 0-4 trong ngày Pochettino ra mắt Old Trafford</a> <small>thethaovanhoa.vn</small></div></li><li class="dim"><b>แมนยู พบ เบรนต์ฟอร์ด</b> <small>500+</small>
+<div class="rep"><a href="https://today.line.me/th/v3/article/QwkMq0e" target="_blank">แมนฯ ยูไนเต็ดยังฟอร์มห่วยไม่เลิก โดนเบรนต์ฟอร์ดบุกยิง 4 ตุงเกม พรีเมียร์ลีก</a> <small>LINE TODAY</small></div></li></ul></section>
+<section class="card wide foot"><details><summary>순위 매기는 방법</summary>
+<p><b>큰 이슈</b>: 관련기사 수 + 최근 3시간 기사 수 + 대표 기사 댓글 수·시간당 증가, 여기에 보수 관심 분류 가중치와 '보수 매체가 진보 매체보다 많이 다루는 정도'를 곱합니다.</p>
+<p><b>급상승 키워드</b>: 최근 6시간 동안 나온 기사 수 × √(평소 대비 배수) × 분류 가중치. 보수 매체 비중은 매체별 기사량 차이를 보정해서 비교합니다.</p>
+<p><b>댓글 폭발</b>: 시간당 댓글 증가 순(처음 1시간은 기록이 없어 총 댓글 순).</p>
+<p>분류 단어·가중치는 <code>config/topics.txt</code>, 언론사 성향은 <code>config/press.txt</code>, 빼고 싶은 단어는 <code>config/stopwords.txt</code>에서 고칠 수 있습니다.</p>
+<div class="log"><div>RSS 실패 연합뉴스: ParseError</div><div>RSS 실패 연합뉴스: ParseError</div></div></details></section>
+</main>
+<script>
+const K='issue-radar';
+try{const s=JSON.parse(sessionStorage.getItem(K)||'{}');if(s.y)window.scrollTo(0,s.y);if(s.f)setF(s.f)}catch(e){}
+function setF(f){document.querySelectorAll('.f').forEach(b=>b.classList.toggle('on',b.dataset.f===f));
+ document.querySelectorAll('[data-c]').forEach(el=>el.classList.toggle('hide',!!f&&!el.dataset.c.split('|').includes(f)));window._f=f}
+document.querySelectorAll('.f').forEach(b=>b.onclick=()=>setF(b.dataset.f));
+function save(){try{sessionStorage.setItem(K,JSON.stringify({y:scrollY,f:window._f||''}))}catch(e){}}
+addEventListener('beforeunload',save);
+const PUB=document.body.dataset.public==='1', BUILT=new Date(document.body.dataset.built+':00+09:00'), LOADED=Date.now()/1000;
+const $=id=>document.getElementById(id), esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+function ago(){const m=Math.round((Date.now()-BUILT)/60000);$('ago').textContent=` (${m<1?'방금':m+'분 전'})`;
+ const s=$('stale');if(m>45){s.textContent=PUB?`마지막 갱신이 ${m}분 전입니다. 운영자 PC가 꺼져 있어 갱신이 멈췄을 수 있습니다.`:`마지막 갱신이 ${m}분 전입니다.`;s.classList.remove('hide')}else s.classList.add('hide')}
+ago();setInterval(ago,30000);
+if(PUB){setTimeout(()=>{save();location.reload()},5*60*1000)}
+else{
+ const api=(p,b)=>fetch(p,b?{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(b)}:{}).then(r=>r.json());
+ function draw(s){const L=$('acctList');if(!L)return;
+  L.innerHTML=s.accounts.map(a=>{let info;if(a.err)info=`<small class="bad">${esc(a.err)}</small>`;
+   else if(a.fol!=null)info=`<small>${esc(a.name)} · 팔로워 ${a.fol.toLocaleString()}</small>`;
+   else info=`<small>${s.connected?'다음 갱신 때 확인':'인스타 연결 전'}</small>`;
+   return `<span class="a">@${esc(a.u)} ${info}<button class="x" title="빼기" data-rm="${esc(a.u)}">×</button></span>`}).join('')||'<small>아직 없음</small>';
+  L.querySelectorAll('[data-rm]').forEach(b=>b.onclick=()=>{if(confirm('@'+b.dataset.rm+' 를 목록에서 뺄까요?'))api('/api/accounts',{remove:b.dataset.rm}).then(r=>{$('acctMsg').textContent=r.msg;load()})})}
+ const load=()=>api('/api/accounts').then(draw).catch(()=>{$('acctMsg').textContent='PC 프로그램(issue_rader.bat)이 꺼져 있어 계정을 고칠 수 없습니다.'});
+ function add(){const v=$('acctIn').value.trim();if(!v)return;$('acctAdd').disabled=true;$('acctMsg').textContent='확인 중…';
+  api('/api/accounts',{add:v}).then(r=>{$('acctMsg').textContent=r.msg;if(r.ok)$('acctIn').value='';load()}).finally(()=>$('acctAdd').disabled=false)}
+ if($('acctAdd')){$('acctAdd').onclick=add;$('acctIn').onkeydown=e=>{if(e.key==='Enter')add()};load()}
+ $('refresh').onclick=()=>api('/api/refresh',{}).then(r=>{$('st').textContent=r.msg;poll()});
+ function poll(){api('/api/state').then(s=>{
+   if(s.last&&s.last>LOADED&&!s.busy){save();location.reload();return}
+   const t=x=>new Date(x*1000).toTimeString().slice(0,5);let m=s.busy?'갱신 중…':(s.next?`다음 ${t(s.next)}`:'');
+   if(s.pub)m+=s.pub.ok?(s.pub.ts?` · 공개 페이지 ${t(s.pub.ts)} 올림`:''):` · ${s.pub.msg}`;$('st').textContent=m;$('refresh').disabled=!!s.busy}).catch(()=>{$('st').textContent='PC 프로그램 꺼짐';})}
+ poll();setInterval(poll,15000);
+}
+</script></body></html>
